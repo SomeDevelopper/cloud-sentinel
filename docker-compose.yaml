@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: cloud-sentinel-postgres
+    environment:
+      POSTGRES_DB: cloudsentinel
+      POSTGRES_USER: cloudsentinel
+      POSTGRES_PASSWORD: cloudsentinel
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cloudsentinel"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - cloud-sentinel-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cloud-sentinel-backend
+    environment:
+      DATABASE_URL: postgresql://cloudsentinel:cloudsentinel@postgres:5432/cloudsentinel
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - cloud-sentinel-network
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cloud-sentinel-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - cloud-sentinel-network
+    volumes:
+      - ./frontend:/app
+
+volumes:
+  postgres_data:
+
+networks:
+  cloud-sentinel-network:
+    driver: bridge
