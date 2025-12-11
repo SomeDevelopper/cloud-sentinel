@@ -37,19 +37,19 @@ services:
     volumes:
       - ./backend:/app
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: cloud-sentinel-frontend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
-    networks:
-      - cloud-sentinel-network
-    volumes:
-      - ./frontend:/app
+#   frontend:
+#     build:
+#       context: ./frontend
+#       dockerfile: Dockerfile
+#     container_name: cloud-sentinel-frontend
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - backend
+#     networks:
+#       - cloud-sentinel-network
+#     volumes:
+#       - ./frontend:/app
 
 volumes:
   postgres_data:

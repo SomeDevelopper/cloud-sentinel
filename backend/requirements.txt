@@ -1,5 +1,11 @@
-fastapi
+fastapi[standard]
+uvicorn
 boto3
 azure-identity
 azure-mgmt-costmanagement
-SQLAlchemy
+psycopg2-binary
+sqlalchemy
+python-jose
+passlib
+cryptography
+python-dotenv
