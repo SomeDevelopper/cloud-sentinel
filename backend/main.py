@@ -4,6 +4,7 @@ from core.config import ENVIRONMENT
 from dotenv import load_dotenv
 from db.database import engine
 from models import Base
+from api.v1 import auth, user, accounts
 
 load_dotenv()
 
@@ -15,7 +16,11 @@ allowed_origins = (['https://cloud-sentinel.herense.com'] if ENVIRONMENT == 'PRO
 
 app.add_middleware(
     CORSMiddleware,
-    allowed_origins=allowed_origins,
-    allow_methods=['*'],
-    allow_headers=['*']
+    allow_origins=allowed_origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
+app.include_router(auth.router, prefix='/v1/auth', tags=['auth'])
+app.include_router(user.router, prefix='/v1/user', tags=['user'])
+app.include_router(accounts.router, prefix='/v1/account', tags=['account'])

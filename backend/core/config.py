@@ -1,3 +1,6 @@
 import os
 
 ENVIRONMENT = os.getenv('ENVIRONMENT')
+SECRET_KEY = os.getenv('SECRET_KEY')
+ENCRYPTION_TYPE = os.getenv('ENCRYPTION_TYPE')
+ENCRYPTION_KEY = os.getenv('ENCRYPTION_KEY')
