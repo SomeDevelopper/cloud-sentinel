@@ -1,13 +1,3 @@
-# TABLE anomalies (
-#     id SERIAL PRIMARY KEY,
-#     account_id UUID FOREIGN KEY,
-#     detected_at TIMESTAMP,
-#     resource_id VARCHAR, -- ex: 'i-0123456789'
-#     severity VARCHAR, -- 'LOW', 'MEDIUM', 'HIGH'
-#     issue_type VARCHAR, -- 'ZOMBIE_DISK', 'IDLE_VM'
-#     estimated_waste DECIMAL(10, 2), -- Argent perdu par mois
-#     status VARCHAR -- 'OPEN', 'IGNORED', 'FIXED'
-# );
 from db.database import Base
 from sqlalchemy import Column, Numeric, String, ForeignKey, DateTime, Integer, Enum, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID

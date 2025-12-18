@@ -103,17 +103,17 @@ Phase 1 : Core Engine (POC) ✅
 
 Phase 2 : Backend Foundation (En cours) 🚧
 
-[ ] Structure FastAPI propre (Architecture en couches).
+[x] Structure FastAPI propre (Architecture en couches).
 
-[ ] Docker & Docker Compose (Postgres).
+[x] Docker & Docker Compose (Postgres).
 
-[ ] Modèles SQLAlchemy & Migrations Alembic.
+[x] Modèles SQLAlchemy & Migrations Alembic.
 
-[ ] Implémentation du chiffrement (Security Utils).
+[x] Implémentation du chiffrement (Security Utils).
 
 Phase 3 : API & Worker
 
-[ ] Routes API (/scan, /accounts, /dashboard).
+[x] Routes API (/scan, /accounts, /dashboard).
 
 [ ] Intégration de Celery + Redis pour les tâches asynchrone.
 

@@ -30,3 +30,4 @@ class CloudAccount(Base):
     daily_costs = relationship("DailyCost", back_populates="account", cascade="all, delete-orphan")
     anomalies = relationship("Anomaly", back_populates="cloud_account")
     scan_results = relationship("ScanResult", back_populates="cloud_account")
+    resource = relationship("CloudResource", back_populates="cloud_account")
