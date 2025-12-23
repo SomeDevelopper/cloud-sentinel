@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from core.deps import get_current_user
-from schemas.account import CloudAccountCreate, CloudAccountResponse
+from schemas.account import CloudAccountCreate, CloudAccountResponse, CloudResourcesResponse
 from schemas.user import StandardResponse
 from models import User
 from services.cloud_account_service import CloudAccountService
@@ -35,6 +35,15 @@ def get_account(db: Session = Depends(get_db), user: User = Depends(get_current_
     return StandardResponse(
         message="User Account successfully retrived",
         data=account_list
+    )
+
+@router.get('/{account_id}/resources', response_model=StandardResponse[List[CloudResourcesResponse]])
+def get_resources(account_id: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    cloud_account_service = CloudAccountService(db=db)
+    account_resources = cloud_account_service.get_resources(account_id)
+    return StandardResponse(
+        message=f"Resources for account {account_id} successfully retrieved",
+        data=account_resources
     )
 
 @router.get('/{account_id}/test_connection', response_model=StandardResponse)

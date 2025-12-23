@@ -12,7 +12,7 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-allowed_origins = (['https://cloud-sentinel.herense.com'] if ENVIRONMENT == 'PRODUCTION' else ['http://localhost:5173'])
+allowed_origins = (['https://cloud-sentinel.herense.com'] if ENVIRONMENT == 'PRODUCTION' else ['http://localhost:3000'])
 
 app.add_middleware(
     CORSMiddleware,

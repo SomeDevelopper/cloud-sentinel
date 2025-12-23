@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 from cryptography.fernet import Fernet
 from models.cloud_account import CloudAccount
-from schemas.account import CloudAccountCreate, CloudAccountResponse
+from models.resources import CloudResource
+from schemas.account import CloudAccountCreate, CloudAccountResponse, CloudResourcesResponse
 from sqlalchemy.orm import load_only
 from cryptography.fernet import Fernet
 from core.security import encrypt_data, decrypt_data
@@ -73,7 +74,17 @@ class CloudAccountService():
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Dabase error :: {e}"
             )
-        
+
+    def get_resources(self, account_id: UUID) -> List[CloudResourcesResponse]:
+        try:
+            resources = self.db.query(CloudResource).filter(CloudResource.cloud_account_id == account_id).all()
+            return resources
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Database error :: {e}"
+            )
+
     def get_credentials_account(self, user_id: UUID, account_id: UUID):
         account_credentials = self.db.query(CloudAccount)\
             .options(load_only(CloudAccount.access_key_public, CloudAccount.dek_encrypted, CloudAccount.cloud_secret_encrypted))\

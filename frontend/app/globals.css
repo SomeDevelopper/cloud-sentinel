@@ -1,0 +1,157 @@
+@import "tailwindcss";
+
+/* Light theme colors */
+:root {
+  /* Background colors */
+  --background: 255 255 255;
+  --surface: 249 250 251;
+  --surface-hover: 243 244 246;
+
+  /* Text colors */
+  --foreground: 17 24 39;
+  --muted-foreground: 107 114 128;
+
+  /* Border colors */
+  --border: 229 231 235;
+  --border-focus: 59 130 246;
+
+  /* Primary brand colors */
+  --primary: 37 99 235;
+  --primary-hover: 29 78 216;
+  --primary-foreground: 255 255 255;
+
+  /* Accent colors */
+  --accent: 139 92 246;
+  --accent-hover: 124 58 237;
+
+  /* Success, warning, error */
+  --success: 34 197 94;
+  --warning: 245 158 11;
+  --error: 239 68 68;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Animation durations */
+  --transition-fast: 150ms;
+  --transition-normal: 250ms;
+  --transition-slow: 350ms;
+}
+
+/* Dark theme colors */
+.dark {
+  /* Background colors */
+  --background: 3 7 18;
+  --surface: 17 24 39;
+  --surface-hover: 31 41 55;
+
+  /* Text colors */
+  --foreground: 243 244 246;
+  --muted-foreground: 156 163 175;
+
+  /* Border colors */
+  --border: 55 65 81;
+  --border-focus: 96 165 250;
+
+  /* Primary brand colors */
+  --primary: 59 130 246;
+  --primary-hover: 96 165 250;
+  --primary-foreground: 255 255 255;
+
+  /* Accent colors */
+  --accent: 167 139 250;
+  --accent-hover: 196 181 253;
+
+  /* Success, warning, error */
+  --success: 74 222 128;
+  --warning: 251 191 36;
+  --error: 248 113 113;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+}
+
+@theme inline {
+  --color-background: rgb(var(--background));
+  --color-surface: rgb(var(--surface));
+  --color-surface-hover: rgb(var(--surface-hover));
+  --color-foreground: rgb(var(--foreground));
+  --color-muted-foreground: rgb(var(--muted-foreground));
+  --color-border: rgb(var(--border));
+  --color-border-focus: rgb(var(--border-focus));
+  --color-primary: rgb(var(--primary));
+  --color-primary-hover: rgb(var(--primary-hover));
+  --color-primary-foreground: rgb(var(--primary-foreground));
+  --color-accent: rgb(var(--accent));
+  --color-accent-hover: rgb(var(--accent-hover));
+  --color-success: rgb(var(--success));
+  --color-warning: rgb(var(--warning));
+  --color-error: rgb(var(--error));
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: rgb(var(--background));
+  color: rgb(var(--foreground));
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  transition: background-color var(--transition-normal) ease, color var(--transition-normal) ease;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(var(--surface));
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--muted-foreground) / 0.3);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--muted-foreground) / 0.5);
+}
+
+/* Smooth transitions for interactive elements */
+button, a, input, select, textarea {
+  transition: all var(--transition-fast) ease;
+}
+
+/* Focus visible styles */
+*:focus-visible {
+  outline: 2px solid rgb(var(--border-focus));
+  outline-offset: 2px;
+}
+
+/* Disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

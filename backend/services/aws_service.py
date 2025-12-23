@@ -1,6 +1,6 @@
 import boto3
 from botocore.exceptions import ClientError, NoCredentialsError
-from fastapi import HTTPException, status
+from datetime import datetime, timedelta
 
 class AwsService():
     def __init__(self, access_key: str, secret_key: str, region: str):
@@ -58,6 +58,79 @@ class AwsService():
                     instances.append(instance_info)
             return instances
         except ClientError as e:
-            raise ValueError(f"AWS Error while scanning EC2 instances: {e}")
+            raise ValueError(f"AWS Error while scanning EC2 instances :: {e}")
         except Exception as e:
-            raise ValueError(f"Error scanning EC2 instances: {e}")
+            raise ValueError(f"Error scanning EC2 instances :: {e}")
+
+
+    def scan_s3_bucket(self):
+        s3_client = self.session.client('s3')
+
+        try:
+            res_bucket = s3_client.list_buckets()
+            buckets = list()
+            for bucket in res_bucket.get('Buckets', []):
+                size_bytes = self.get_s3_bucket_size(bucket_name=bucket.get('Name'), region=self.session.region_name)
+                size_gb = size_bytes / (1024 ** 3)
+                buckets.append({
+                    'resource_id': bucket.get('Name'),
+                    'name': bucket.get('Name'),
+                    'creation_date': bucket.get('CreationDate').isoformat() if bucket.get('CreationDate') else None,
+                    'region': bucket.get('BucketRegion', 'global'),
+                    'size' : size_gb,
+                    'arn': bucket.get('BucketArn', f"arn:aws:s3:::{bucket.get('Name')}")
+                })
+            return buckets
+        except ClientError as e:
+            raise ValueError(f"AWS Error while scanning S3 buckets :: {e}")
+        except Exception as e:
+            raise ValueError(f"Error scanning S3 buckets :: {e}")
+
+    def scan_rds_instance(self):
+        rds_client = self.session.client('rds')
+        try:
+            res = rds_client.describe_db_instances()
+            instances_list = list()
+            for instance in res.get('DBInstances', []):
+                instances_list.append({
+                    'resource_id': instance.get('DBInstanceIdentifier'),
+                    'resource_class': instance.get('DBInstanceClass'),
+                    'engine': instance.get('Engine'),
+                    'resource_status': instance.get('DBInstanceStatus'),
+                    'allocated_storage': instance.get('AllocatedStorage'),
+                    'address': instance.get('Endpoint', {}).get('Address'),
+                    'creation_date': instance.get('InstanceCreateTime').isoformat() if instance.get('InstanceCreateTime') else None,
+                    'storage_type': instance.get('StorageType'),
+                    'region': self.session.region_name
+                })
+            return instances_list
+        except ClientError as e:
+            raise ValueError(f"AWS Error while scanning RDS instances :: {e}")
+        except Exception as e:
+            raise ValueError(f"AWS Error while scanning RDS instances :: {e}")
+
+
+    def get_s3_bucket_size(self, bucket_name: str, region = 'eu-west-3'):
+        cw_client = self.session.client('cloudwatch')
+        now = datetime.now()
+        try:
+            res = cw_client.get_metric_statistics(
+                Namespace='AWS/S3',
+                MetricName='BucketSizeBytes',
+                Dimensions=[
+                    {'Name': 'BucketName', 'Value': bucket_name},
+                    {'Name': 'StorageType', 'Value': 'StandardStorage'}
+                ],
+                StartTime=  now - timedelta(days=2),
+                EndTime=now,
+                Period=86400,
+                Statistics=['Average', 'Maximum']
+            )
+            datapoint = res.get('Datapoints')
+            if datapoint:
+                return datapoint[-1]['Average']
+            return 0.0
+        except ClientError as e:
+            raise ValueError(f"AWS Error while scanning S3 bucket size for bucket {bucket_name}:: {e}")
+        except Exception as e:
+            raise ValueError(f"AWS Error while scanning S3 bucket size for bucket {bucket_name} :: {e}")
