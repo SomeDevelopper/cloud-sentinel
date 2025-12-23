@@ -66,8 +66,15 @@ export default function AddAccountModal({ onClose, onSuccess }: AddAccountModalP
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200"
+      onClick={(e) => {
+        if (e.target === e.currentTarget && !loading) {
+          onClose();
+        }
+      }}
+    >
+      <Card className="max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-in slide-in-from-bottom-4 duration-300">
         <div className="flex justify-between items-start mb-6">
           <div>
             <Title>Add Cloud Account</Title>

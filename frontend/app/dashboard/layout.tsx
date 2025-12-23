@@ -13,7 +13,7 @@ export default function DashboardLayout({
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const { theme, setTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
 
   useEffect(() => {
@@ -69,8 +69,9 @@ export default function DashboardLayout({
 
             <div className="flex items-center space-x-3">
               <button
-                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                onClick={toggleTheme}
                 className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200"
+                aria-label="Toggle theme"
               >
                 {theme === 'dark' ? (
                   <svg className="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -7,6 +7,7 @@ type Theme = 'light' | 'dark';
 interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -28,9 +29,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (!mounted) return;
 
     // Update document class and localStorage when theme changes
-    document.documentElement.classList.toggle('dark', theme === 'dark');
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
     localStorage.setItem('theme', theme);
   }, [theme, mounted]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   // Prevent flash of unstyled content
   if (!mounted) {
@@ -38,7 +47,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:15-alpine
@@ -64,22 +62,28 @@ services:
     networks:
       - cloud-sentinel-network
 
-#   frontend:
-#     build:
-#       context: ./frontend
-#       dockerfile: Dockerfile
-#     container_name: cloud-sentinel-frontend
-#     ports:
-#       - "3000:3000"
-#     depends_on:
-#       - backend
-#     networks:
-#       - cloud-sentinel-network
-#     volumes:
-#       - ./frontend:/app
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cloud-sentinel-frontend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/v1
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - cloud-sentinel-network
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+      - frontend_next:/app/.next
 
 volumes:
   postgres_data:
+  frontend_node_modules:
+  frontend_next:
 
 networks:
   cloud-sentinel-network:
